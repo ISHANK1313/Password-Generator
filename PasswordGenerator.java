@@ -1,3 +1,6 @@
+import java.awt.*;
+import java.awt.datatransfer.Clipboard;
+import java.awt.datatransfer.StringSelection;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.security.SecureRandom;
@@ -6,7 +9,19 @@ import java.util.Scanner;
 
 public class PasswordGenerator {
 
-private static final String characterset="ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+    private static final String characterset="ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+
+    public static void copyToClipboard(String text){
+        try {
+            Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
+            StringSelection selection = new StringSelection(text);
+            clipboard.setContents(selection, null);
+            System.out.println("password copied to clipboard...");
+        }
+        catch (Exception e){
+            System.out.println("Clipboard not available ...");
+        }
+    }
     public static void prompt(){
         try {
             Scanner sc = new Scanner(System.in);
@@ -17,6 +32,7 @@ private static final String characterset="ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijkl
             String c = s.nextLine();
             String pass = PasswordGenerator.getPassword(k, c);
             System.out.println(pass);
+            PasswordGenerator.copyToClipboard(pass);
             PasswordGenerator.savePasswordToFile(pass);
 
         }
@@ -75,6 +91,7 @@ private static final String characterset="ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijkl
                     password.append(PasswordGenerator.characterset.charAt(decimal));
                 }
             }
+
         return password.toString();
     }
 
