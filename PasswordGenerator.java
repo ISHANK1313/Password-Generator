@@ -1,6 +1,9 @@
+import javax.swing.*;
 import java.awt.*;
 import java.awt.datatransfer.Clipboard;
 import java.awt.datatransfer.StringSelection;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.security.SecureRandom;
@@ -11,6 +14,60 @@ public class PasswordGenerator {
 
     private static final String characterset="ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
 
+
+    public static void createAndDisplayGUI(){
+        JFrame frame= new JFrame("Password generator");
+        frame.setSize(400,300);
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.setLayout(null);
+        frame.setVisible(true);
+
+        JLabel label = new JLabel("Enter Password length");
+        JTextField field= new JTextField();
+        label.setBounds(50,30,200,25);
+        field.setBounds(50,60,100,25);
+        frame.add(field);
+        frame.add(label);
+
+        JCheckBox checkBox=new JCheckBox("Include Symbols");
+        checkBox.setBounds(50,100,200,25);
+        frame.add(checkBox);
+
+        JButton button = new JButton("Generate Password");
+        button.setBounds(50,140,200,30);
+        frame.add(button);
+
+        JTextField passwordField=new JTextField();
+        passwordField.setBounds(40,190,300,25);
+        passwordField.setEditable(false);
+        frame.add(passwordField);
+
+        button.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+             try {
+                 String p = field.getText();
+                 int j = Integer.parseInt(p);
+                 String isCheck=checkBox.isSelected()?"Y":"N";
+                 String password=getPassword(j,isCheck);
+                 passwordField.setText(password);
+                 copyToClipboard(password);
+                 JOptionPane.showMessageDialog(frame, "Password copied to clipboard!");
+             }
+             catch (NumberFormatException ex){
+                 JOptionPane.showMessageDialog(frame,"Input a valid number...","Error",JOptionPane.ERROR_MESSAGE);
+             }
+             catch (IllegalArgumentException g){
+                 JOptionPane.showMessageDialog(frame,g.getMessage(),"Error",JOptionPane.ERROR_MESSAGE);
+             }
+             catch (Exception t){
+                 JOptionPane.showMessageDialog(frame,"Invalid Length...","Error",JOptionPane.ERROR_MESSAGE);
+             }
+            }
+        });
+
+
+    }
     public static void copyToClipboard(String text){
         try {
             Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
@@ -97,10 +154,15 @@ public class PasswordGenerator {
 
     public static void main(String[] args){
 
-
-        System.out.println("Welcome to random password generator... ");
+      // for CLI--->
+       /* System.out.println("Welcome to random password generator... ");
         System.out.println("Please enter the length of the password you want... ");
         PasswordGenerator.prompt();
+        */
+
+
+        // for GUI--->
+        createAndDisplayGUI();
 
     }
 }
