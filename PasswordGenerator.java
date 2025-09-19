@@ -67,6 +67,23 @@ public class PasswordGenerator {
         });
 
 
+            JButton button1= new JButton("Save To File");
+            button1.setBounds(260,140,120,30);
+            frame.add(button1);
+            button1.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    String password=passwordField.getText();
+                    if (password.isEmpty()) {
+                        JOptionPane.showMessageDialog(frame, "No password to save. Generate one first!", "Warning", JOptionPane.WARNING_MESSAGE);
+                        return;
+                    }
+                    String clicked="Y";
+                    savePasswordToFile(password,clicked);
+                    JOptionPane.showMessageDialog(frame,"file created and text written successfully...");
+
+                }
+            });
     }
     public static void copyToClipboard(String text){
         try {
@@ -90,7 +107,11 @@ public class PasswordGenerator {
             String pass = PasswordGenerator.getPassword(k, c);
             System.out.println(pass);
             PasswordGenerator.copyToClipboard(pass);
-            PasswordGenerator.savePasswordToFile(pass);
+            System.out.println("do you want to store the password in a file ?...");
+            System.out.println("if yes then input Y , if no then input N");
+            Scanner t = new Scanner(System.in);
+            String j=t.nextLine();
+            PasswordGenerator.savePasswordToFile(pass,j);
 
         }
         catch (IllegalArgumentException g){
@@ -102,13 +123,9 @@ public class PasswordGenerator {
 
     }
 
-    public static void savePasswordToFile(String password){
+    public static void savePasswordToFile(String password,String j){
 
         try {
-            System.out.println("do you want to store the password in a file ?...");
-            System.out.println("if yes then input Y , if no then input N");
-            Scanner t = new Scanner(System.in);
-            String j = t.nextLine();
             if (!j.equalsIgnoreCase("Y") && !j.equalsIgnoreCase("N")) {
                 throw new IllegalArgumentException("Wrong input...");
             } else if (j.equalsIgnoreCase("Y")) {
